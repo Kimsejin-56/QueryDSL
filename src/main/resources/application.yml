@@ -13,15 +13,10 @@ spring:
     hibernate:
      # show_sql: true
      format_sql: true
+     use_sql_comments: true
 
 logging.level:
  org.hibernate.SQL: debug
- p6spy: INFO
- com.p6spy: INFO
-# org.hibernate.type: trace
 
-decorator:
-   datasource:
-     p6spy:
-       enable-logging: true
+
 

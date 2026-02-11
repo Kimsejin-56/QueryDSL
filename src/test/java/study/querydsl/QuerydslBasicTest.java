@@ -13,6 +13,7 @@ import study.querydsl.entity.QMember;
 import study.querydsl.entity.Team;
 
 import static org.assertj.core.api.Assertions.*;
+import static study.querydsl.entity.QMember.*;
 
 /**
  * EntityManager 로 JPAQueryFactory 생성
@@ -63,12 +64,10 @@ public class QuerydslBasicTest {
     @Test
     public void startQuerydsl() {
         //member1 찾기
-        QMember m = new QMember("m");
-
         Member findMember = queryFactory
-                .select(m)
-                .from(m)
-                .where(m.username.eq("member1")) //파라미터 바인딩
+                .select(member)
+                .from(member)
+                .where(member.username.eq("member1")) //파라미터 바인딩
                 .fetchOne();
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
