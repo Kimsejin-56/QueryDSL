@@ -2,6 +2,7 @@ package study.querydsl;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -447,5 +448,36 @@ public class QuerydslBasicTest {
         }
     }
 
+    //Case 추천 X, 애플리케이션 계층이나 프레젠테이션 계층에서 처리할 일
+    //DB는 필터링만 해서 데이터 뽑아오는 용도로만 사용하자
+    @Test
+    public void basicCase() {
+        List<String> result = queryFactory
+                .select(member.age
+                    .when(10).then("열살")
+                    .when(20).then("스무살")
+                    .otherwise("기타"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    public void complexCase() {
+        List<String> result = queryFactory
+                .select(new CaseBuilder()
+                    .when(member.age.between(0, 20)).then("0~20")
+                    .when(member.age.between(21, 30)).then("21~30")
+                    .otherwise("기타"))
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
 
 }
