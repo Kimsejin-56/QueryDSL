@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
+import study.querydsl.dto.QMemberDto;
 import study.querydsl.dto.UserDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
@@ -603,7 +604,7 @@ public class QuerydslBasicTest {
         }
     }
 
-    //생성자 사용
+    //생성자 사용 (런타임 오류)
     @Test
     public void findDtoConstructor() {
         List<MemberDto> result = queryFactory
@@ -636,6 +637,22 @@ public class QuerydslBasicTest {
 
         for (UserDto userDto : result) {
             System.out.println("userDto = " + userDto);
+        }
+    }
+
+    /**
+     * 장점 : 컴파일러로 타입을 체크 가능 (안전한 방법)
+     * 단점 : DTO에 QueryDSL 어노테이션을 유지 해야 하는 점과 DTO까지 Q파일을 생성해야 한다
+     */
+    @Test
+    public void findDtoByQueryProjection() {
+        List<MemberDto> result = queryFactory
+                .select(new QMemberDto(member.username, member.age))
+                .from(member)
+                .fetch();
+
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
         }
     }
 }
